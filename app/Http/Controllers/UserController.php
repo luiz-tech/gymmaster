@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 
+
 class UserController extends Controller
 {
     public function login(Request $request)
@@ -25,6 +26,11 @@ class UserController extends Controller
             Session::put($usuario->toArray());
 
             //carregando dados necessários
+
+            $num_alunos = DB::table('alunos')->count();
+
+            return redirect()->intended('/painel')->with(
+                ['num_alunos' => $num_alunos]);
         
         } else {
 
