@@ -15,14 +15,11 @@ class CreatePessoasTable extends Migration
     {
         Schema::create('pessoas', function (Blueprint $table) {
             $table->id();
-             $table->foreignId('id_endereco')->constrained('enderecos');
-              $table->foreignId('id_contato')->constrained('contatos');
             $table->string('nome');
             $table->string('email');
             $table->string('senha');
-            $table->string('cpf',11);
+            $table->string('cpf',30);
             $table->date('dt_nascimento');
-            $table->integer('idade');
             $table->enum('sexo',['M','F','O']);
             $table->char('status',1);
 

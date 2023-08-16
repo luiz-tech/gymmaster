@@ -1,8 +1,8 @@
 <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
+    <strong>Copyright &copy; 2014-2021 <a href="https://www.instagram.com/luiz_websolucoes/">Luiz Web Soluções</a>.</strong>
+    Todos os direitos reservados
     <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.2.0
+      <b>Versão</b>1.0.0
     </div>
   </footer>
 
@@ -16,7 +16,6 @@
 
 
 <!-- Scripts Gerais do FramkWork -->
-
 <!-- jQuery -->
 <script src="adminlte/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -37,3 +36,4 @@
 <script src="adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="adminlte/dist/js/adminlte.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

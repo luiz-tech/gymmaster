@@ -7,10 +7,26 @@ use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 
+use App\Models\Enderecos;
+use App\Models\Contatos;
+
+
 class Pessoas extends Model implements Authenticatable
 {
     use HasFactory;
 
+    //métodos de configuração de relacionamentos
+    public function endereco()
+    {
+        return $this->hasOne(Enderecos::class, 'id_pessoa');
+    }
+
+    public function contato()
+    {
+        return $this->hasOne(Contatos::class, 'id_pessoa');
+    }
+
+    //metódos de autenticablidade da tabela
     public function getAuthIdentifierName()
     {
         return 'id';

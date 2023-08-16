@@ -15,11 +15,14 @@ class CreateAlunosTable extends Migration
     {
         Schema::create('alunos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_pessoa')->constrained('pessoas');
-            $table->foreignId('id_plano')->constrained('planos');
+            $table->unsignedBigInteger('id_pessoa');
+            $table->unsignedBigInteger('id_plano');
+            $table->foreign('id_pessoa')->references('id')->on('pessoas')->onDelete('cascade');
+            $table->foreign('id_plano')->references('id')->on('planos')->onDelete('cascade');
             $table->float('peso');
             $table->float('altura');
             $table->mediumText('objetivos');
+            $table->timestamps();
         });
     }
 

@@ -15,9 +15,10 @@ class CreateInstrutoresTable extends Migration
     {
         Schema::create('instrutores', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_pessoa')->constrained('pessoas');
+            $table->foreignId('id_pessoa')->constrained('pessoas')->onDelete('cascade');;
             $table->string('especialidade');
             $table->float('salario');
+            $table->timestamps();
 
         });
     }

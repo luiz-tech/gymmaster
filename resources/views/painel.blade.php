@@ -30,14 +30,15 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>150</h3>
-
+                <h3 id="alunos_totais">{{ App\Models\Pessoas::join('alunos', 'pessoas.id', '=', 'alunos.id_pessoa')
+                ->count(); }}
+                </h3>
                 <p>Alunos Matriculados</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{ route('Lista de Alunos', ['status' => 'all']) }}" class="small-box-footer">Veja Mais<i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -45,14 +46,16 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>53</h3>
+                <h3 id="alunos_ativos">{{ App\Models\Pessoas::join('alunos', 'pessoas.id', '=', 'alunos.id_pessoa')
+                ->where('pessoas.status', 'A')
+                ->count();}}</h3>
 
                 <p>Alunos Ativos</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{ route('Lista de Alunos', ['status' => 'a']) }}" class="small-box-footer">Veja Mais<i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -60,14 +63,16 @@
             <!-- small box -->
             <div class="small-box badge-danger">
               <div class="inner">
-                <h3>44</h3>
+                <h3 id="alunos_inativos">{{ App\Models\Pessoas::join('alunos', 'pessoas.id', '=', 'alunos.id_pessoa')
+                ->where('pessoas.status', 'I')
+                ->count();}}</h3>
 
                 <p>Alunos Inativos</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{ route('Lista de Alunos', ['status' => 'i']) }}" class="small-box-footer">Veja Mais<i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -75,14 +80,14 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>65</h3>
+                <h3 id="num_planos">{{ App\Models\Planos::count() }}</h3>
 
                 <p>Planos</p>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{ route('Lista de Planos') }}" class="small-box-footer">Veja Mais<i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -97,49 +102,41 @@
               <div class="card-header border-0">
                 <h3 class="card-title">
                   <i class="fas fa-th mr-1"></i>
-                  Sales Graph
+                  Estatísticas Matrículas
                 </h3>
 
                 <div class="card-tools">
-                  <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                  <button type="button" class="btn bg-primary btn-sm" data-card-widget="collapse">
                     <i class="fas fa-minus"></i>
                   </button>
-                  <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">
+                  <!-- button type="button" class="btn bg-info btn-sm" data-card-widget="remove">
                     <i class="fas fa-times"></i>
-                  </button>
+                  </button -->
                 </div>
               </div>
               <div class="card-body">
-                @csrf
                 <canvas class="chart" id="line-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
               </div>
               <!-- /.card-body -->
-              <div class="card-footer bg-transparent">
+              <!-- div class="card-footer bg-transparent">
                 <div class="row">
-                  <div class="col-4 text-center">
-                    <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"
-                           data-fgColor="#39CCCC">
-
-                    <div class="text-white">Mail-Orders</div>
-                  </div>
-                  <!-- ./col -->
+                
                   <div class="col-4 text-center">
                     <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
                            data-fgColor="#39CCCC">
 
                     <div class="text-white">Online</div>
                   </div>
-                  <!-- ./col -->
+              
                   <div class="col-4 text-center">
                     <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"
                            data-fgColor="#39CCCC">
 
                     <div class="text-white">In-Store</div>
                   </div>
-                  <!-- ./col -->
+          
                 </div>
-                <!-- /.row -->
-              </div>
+              </div -->
               <!-- /.card-footer -->
             </div>
             <!-- /.card -->
@@ -178,8 +175,12 @@
 <!-- Script que renderiza o gráfico -->
 <script>
     $(document).ready(function() {
-        // Faz a requisição AJAX para obter os dados do gráfico
+        
+      request_datacharts() //carrega os dados do gráfico
+      
+    });
 
+    function request_datacharts() {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -192,44 +193,51 @@
             dataType: "json",
             success: function(data) {
                 renderChart(data);
+                console.log(data);
             },
             error: function(error) {
                 console.error("Erro ao carregar os dados do gráfico:", error);
             }
         });
+    }
 
-        function renderChart(data) {
-            var weekLabels = data.map(item => 'Semana ' + item.week);
-            var studentCounts = data.map(item => item.student_count);
+    function renderChart(data) {
+      var dayLabels = data.map(item => getDayName(item.day)); // Função para obter o nome do dia da semana
 
-            var ctx = document.getElementById("line-chart").getContext("2d");
-            var myChart = new Chart(ctx, {
-                type: "line",
-                data: {
-                    labels: weekLabels,
-                    datasets: [
-                        {
-                            label: "Alunos Matriculados",
-                            data: studentCounts,
-                            borderColor: "rgba(0, 255, 89, 1)",
-                            backgroundColor: "rgba(182, 230, 240, 0.2)",
-                            borderWidth: 1,
-                        },
-                    ],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                         y: {
-                            beginAtZero: true,
-                            stepSize: 10,
-                        },
-                    },
-                },
-            });
-        }
-    });
+      var ctx = document.getElementById("line-chart").getContext("2d");
+      var myChart = new Chart(ctx, {
+          type: "line",
+          data: {
+              labels: dayLabels,
+              datasets: [
+                  {
+                      label: "Alunos Matriculados",
+                      data: data.map(item => item.student_count),
+                      borderColor: "rgba(0, 255, 89, 1)",
+                      backgroundColor: "rgba(182, 230, 240, 0.2)",
+                      borderWidth: 1,
+                  },
+              ],
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                  y: {
+                      beginAtZero: true,
+                      stepSize: 10,
+                  },
+              },
+          },
+      });
+  }
+
+  //função auxiliar ao gráfico
+  function getDayName(dayNumber) {
+      var daysOfWeek = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+      return daysOfWeek[dayNumber - 1];
+  }
+
 </script>
 
 </body>
