@@ -63,3 +63,5 @@ Route::get('/planos',[PlanoController::class,'load_planos'])->name('Lista de Pla
 Route::post('/excluir_plano',[PlanoController::class,'delete_planos'])->name('Excluir Plano');
 
 Route::post('/editar_plano',[PlanoController::class,'edit_planos'])->name('Editar Plano');
+
+Route::post('/new_plano',[PlanoController::class,'new_planos'])->name('Novo Plano');

@@ -12,7 +12,7 @@
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item">
-              <a class="btn btn-md btn-success btnNovoInstrutor" type="button" href="#"><i class="fas fa-plus"></i> Novo Instrutor</a>
+              <a class="btn btn-md btn-success btnNovoPlano" type="button" href="#"><i class="fas fa-plus"></i> Novo Plano</a>
             </li>
           </ol>
         </div>
@@ -29,7 +29,7 @@
           <div class="card">
             <img class="card-img-top" src="resources/images/logo-dark.png" alt="Plano de Academia">
             <div class="card-body">	
-              <h4 class="card-title">{{ $plano->plano }}</h4>
+              <h3 class="card-title">{{ $plano->plano }}</h3>
               <p class="card-text">{{ $plano->descricao }}</p>
               <h4 class="card-title bg-light">Alunos Matriculados: {{ $plano->alunos_count }}</h5>
             </div>
@@ -52,17 +52,27 @@
             			<a href="#página-de-vendas" class="btn btn-primary">Detalhes</a>
             		</div>
 	              	<div class="col-4">
-	              		<a href="#" onclick="editarPlano({{ $plano->id }});" class="btn btn-warning">Editar</a>
+	              		<a href="#" onclick="editarPlano({{ $plano }});" class="btn btn-warning">Editar</a>
 					</div>
 					<div class="col-4">
-						<a href="#" onclick="confirmDelete({{ $plano->id }},'{{ $plano->plano }}');" 
-
-						class="btn btn-danger   
+						
 
 						@if($plano->alunos_count > 0)
-							disabled
+							
+							<a
+								class="btn btn-danger"
+								data-toggle="tooltip" 
+								title="Este plano possui alunos matriculados">Excluir
+							</a>
+							
+						@else 
+							<a href="#" onclick="confirmDelete({{ $plano->id }},'{{ $plano->plano }}');" 
+								class="btn btn-danger"
+								title="AAA"
+								>Excluir
+
+							</a>
 						@endif
-						">Excluir</a>
 
 					</div>	
             	</div>
@@ -81,34 +91,143 @@
 
 {{ view('footer') }}
 
-<!-- Script de Exclusão do Plano -->
+<!-- Modal de Cadastro de Plano -->
+<div class="modal fade" id="modalNovoPlano" tabindex="-1" role="dialog" aria-labelledby="modalNovoPlanoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modalNovoPlanoLabel">Cadastre um Novo Plano</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Formulário de Cadastro de Novo Plano -->
+        <form id="formNovoPlano" method="POST">
+            @csrf
+            <hr>
+            <!-- Dados Pessoais -->
+            <div class="row mb-3 pt-3">
+                <div class="col-md-6">
+                    <label for="novo_nomeplano">Nome do Plano</label>
+                    <input type="text" class="form-control" id="novo_nomeplano" name="novo_nomeplano" placeholder="Informe o nome do Plano"  required>
+                </div>
+                <div class="col-md-6">
+                    <label for="novo_mensalidade">Mensalidade (R$)</label>
+                    <input type="number" step="any" class="form-control" id="novo_mensalidade" name="novo_mensalidade" placeholder="Informe o preço da mensalidade"  required>
+                </div>
+                <div class="col-md-12">
+                    <label for="descricao">Descrição</label>
+                    <textarea type="text" class="form-control" id="novo_descricao" name="novo_descricao" placeholder="Informe uma descrição para o plano"  required></textarea>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btnSalvarNovo">Adicionar Plano</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Edição de Plano -->
+<div class="modal fade" id="modalEditarPlano" tabindex="-1" role="dialog" aria-labelledby="modalEditarPlanoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modalEditarPlanoLabel">Edição de um Plano</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Formulário de Cadastro de Novo Plano -->
+        <form id="formEditarPlano" method="POST">
+            @csrf
+            <input type="hidden" name="idplano" id="idplano" value="">
+            <hr>
+            <!-- Dados Pessoais -->
+            <div class="row mb-3 pt-3">
+                <div class="col-md-6">
+                    <label for="nomeplano">Nome do Plano</label>
+                    <input type="text" class="form-control" id="nomeplano" name="nomeplano" placeholder="Informe o nome do Plano"  required>
+                </div>
+                <div class="col-md-6">
+                    <label for="mensalidade">Mensalidade (R$)</label>
+                    <input type="number" step="any" class="form-control" id="mensalidade" name="mensalidade" placeholder="Informe o preço da mensalidade"  required>
+                </div>
+                <div class="col-md-6">
+                    <label for="status">Status</label>
+                    <select name="status" id="status" class="form-control" required>
+                    	<option value="A">Ativo</option>
+                    	<option value="I">Inativo</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="descricao">Descrição</label>
+                    <textarea type="text" class="form-control" id="descricao" name="descricao" placeholder="Informe uma descrição para o plano"  required></textarea>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btnEditarNovo">Salvar Alterações</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Script de Edição do Plano -->
 <script>
 	
-	function editarPlano(id) 
+	function editarPlano(plano) 
 	{
+		$('#formEditarPlano')[0].reset();
+
+		$('#idplano').val(plano.id);
+		$('#nomeplano').val(plano.plano);
+		$('#mensalidade').val(plano.mensalidade);
+		$('#descricao').val(plano.descricao);
+
+		$('#modalEditarPlano').modal('show');
+	 	
+	} 
+
+	$('#btnEditarNovo').click(function(){
+		
+		var formData = $('#formEditarPlano').serialize();
+
 		$.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             }
         });
-
+		
         $.ajax({
             type: "POST",
             url: "{{ route('Editar Plano') }}",
-            data: {'id':id},
+            data: formData,
             success: function(response) {
-            	alert(response);
+                location.reload();
             },
             error: function(error) {
                 console.error("Erro ao carregar os dados do gráfico:", error);
             }
-        });
-	 	
-	} 
+        });	
+
+
+	});
 
 </script>
 
-<!-- Script de Edição do Plano -->
+<!-- Script de Exclusão do Plano -->
 <script>
 
 	function confirmDelete(id, nome) {
@@ -149,4 +268,49 @@
             }
         });	
 	}
-	</script>
+</script>
+
+<!-- Script de Cadastro -->
+<script>
+	$('.btnNovoPlano').click(function(){	
+		$('#modalNovoPlano').modal('show');
+	});
+
+
+	$('#btnSalvarNovo').click(function(){
+		
+		var formData = $('#formNovoPlano').serialize();
+
+		$.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "{{ route('Novo Plano') }}",
+     		data: formData ,
+            success: function(response) {
+ 				if(response === true){
+ 					location.reload();
+ 				}
+ 				else {
+ 					alert('erro');
+ 				}
+            },
+            error: function(error) {
+                console.error("Erro criar novo Plano", error);
+            }
+        });
+
+
+	});
+</script>
+
+<!-- Configurações de ToolTip -->
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
