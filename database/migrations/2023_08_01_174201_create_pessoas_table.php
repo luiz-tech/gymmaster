@@ -17,7 +17,7 @@ class CreatePessoasTable extends Migration
             $table->id();
             $table->string('nome');
             $table->string('email');
-            $table->string('senha');
+            $table->string('password');
             $table->string('cpf',30);
             $table->date('dt_nascimento');
             $table->enum('sexo',['M','F','O']);

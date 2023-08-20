@@ -15,25 +15,34 @@
   <link rel="stylesheet" href="adminlte/dist/css/adminlte.min.css">
 </head>
 <body class="hold-transition login-page">
-<div class="login-box">
+<div class="login-box text-center">
   <!-- /.login-logo -->
 
-  @if ($errors->any())
-    <div class="p-1 alert alert-sm alert-danger">
-      <ul>
-        @foreach ($errors->all() as $error)
-          <li>{{ $error }}</li>
-        @endforeach
-      </ul>
-    </div>
-  @endif
+  
 
+  <img class="img-circle mb-3" width=100 src="resources/images/logo-dark.png"/>
   <div class="card card-outline card-primary">
+    
     <div class="card-header text-center">
-      <a href="../../index2.html" class="h1"><b>Gym</b>Master</a>
+      <p class="h1"><b>Gym</b>Master</p>
     </div>
     <div class="card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
+      @if (isset($_GET['erro']) && $_GET['erro'] === 'session')
+          <div class="p-1 alert alert-sm alert-danger">
+              É necessário estar logado para acessar esta página.
+          </div>
+      @endif
+
+      @if ($errors->any())
+        <div class="p-1 alert alert-sm alert-warning">
+          <ul>
+            @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </div>
+      @endif
+      <p class="login-box-msg">Use suas Credenciais para Logar</p>
       <form action="{{ route('auth') }}" method="post">
         @csrf
         <div class="input-group mb-3">
@@ -57,13 +66,13 @@
             <div class="icheck-primary">
               <input type="checkbox" id="remember">
               <label for="remember">
-                Remember Me
+                Lembre-me
               </label>
             </div>
           </div>
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
           </div>
           <!-- /.col -->
         </div>

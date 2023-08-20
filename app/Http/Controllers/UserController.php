@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+//serviço personalizado de validação
+use App\Services\ValidationService;
+
 //usando modelos
 use App\Models\Pessoas;
 use App\Models\Alunos;
@@ -20,28 +23,39 @@ use App\Models\Contatos;
 
 class UserController extends Controller
 {
-    public function login(Request $request)
+    public function user_login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $email = trim($request->input('email'));
+        $password = $request->input('password');
 
-        if (Auth::attempt($credentials)) {
+        $user = Pessoas::where('email', $email)->first();
 
-            // Preencher a sessão com os dados do usuário
-            $usuario = Auth::user();
+        if ($user) 
+        {  
+            if(Hash::check($password, $user->password))
+            {
+                //realizar login do usuario
+                Auth::login($user);
 
-            Session::put($usuario->toArray());
+                Session::put($user->toArray());
 
-            //carregando dados necessários
-
-            $num_alunos = DB::table('alunos')->count();
-
-            return redirect()->intended('/painel');
-        
+                return redirect()->intended('/painel');
+            
+            } else {
+                // email incorreto
+                return back()->withErrors(['email' => 'E-mail Inválido.']);
+            }
+            
         } else {
-
-            //pagina de login com mensagem de erro
-            return back()->withErrors(['credentials' => 'Credenciais inválidas Verifique Novamente']);
+            // senha incorreta
+            return back()->withErrors(['senha' => 'Senha Incorreta.']);
         }
+    }
+
+    public function user_logout()
+    {
+        Auth::logout();
+        return redirect()->route('Login'); 
     }
 
     public function load_alunos(Request $request)
@@ -63,7 +77,7 @@ class UserController extends Controller
                 'pessoas.id as id_pessoa_master',
                 'pessoas.nome',
                 'pessoas.email',
-                'pessoas.senha',
+                'pessoas.password',
                 'pessoas.cpf',
                 'pessoas.dt_nascimento',
                 'pessoas.sexo',
@@ -110,7 +124,15 @@ class UserController extends Controller
     }
 
     public function edit_aluno(Request $request)
-    {
+    {   
+        // Validação dos campos
+        $validationResult = $this->validateAlunos($request->all(),null);
+
+        if ($validationResult !== true)
+        {
+            return $validationResult;
+        }
+
         try {
             $alunoId = $request->input('aluno_id');
 
@@ -118,7 +140,7 @@ class UserController extends Controller
             Pessoas::where('id', $alunoId)
                 ->update([
                     'nome' => $request->input('nome'),
-                    'email' => $request->input('email'),
+                    'email' => Str::trim($request->input('email')),
                     'cpf' => $request->input('cpf'),
                     'dt_nascimento' => $request->input('dt_nascimento'),
                     'status' => $request->input('status'),
@@ -165,10 +187,13 @@ class UserController extends Controller
             return response()->json(['error' => 'Erro ao atualizar aluno: ' . $e->getMessage()], 500);
         }
     }
-
       
     public function delete_aluno(Request $request)
     {
+        DB::table('pagamentos')->where('id_aluno', $request->id)->delete();
+
+        DB::table('alunos')->where('id','=',$request->id)->delete();
+
         DB::table('pessoas')->where('id','=',$request->id)
         ->delete();
 
@@ -178,13 +203,22 @@ class UserController extends Controller
         DB::table('contatos')->where('id_pessoa','=',$request->id)
         ->delete();
 
-        DB::table('alunos')->where('id','=',$request->id)->delete();
-
         return response()->json(true);
     }
 
     public function new_aluno(Request $request)
-    {
+    {   
+
+        // Validação dos campos
+        $validationResult = $this->validateAlunos($request->all(),'novo_');
+
+        if ($validationResult !== true)
+        {
+            //return $validationResult;
+            return $validationResult;
+
+        }
+
         try {
             // Dados do formulário de cadastro de novo aluno
             $alunoData = $request->except('_token');
@@ -192,8 +226,8 @@ class UserController extends Controller
             // Inserir na tabela "pessoas"
             $pessoaId = DB::table('pessoas')->insertGetId([
                 'nome' => $alunoData['novo_nome'],
-                'email' => $alunoData['novo_email'],
-                'senha' => Hash::make(Str::random(6)),
+                'email' => Str::trim($alunoData['novo_email']),
+                'password' => Hash::make('123'),
                 'cpf' => $alunoData['novo_cpf'],
                 'dt_nascimento' => $alunoData['novo_dt_nascimento'],
                 'sexo' => $alunoData['novo_sexo'],
@@ -237,4 +271,63 @@ class UserController extends Controller
         } 
     }
 
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('Login');
+    }
+
+    // Validar os campos específicos dos alunos
+    public function validateAlunos($data,$prefix)
+    {   
+        // Definição das regras de integridade
+        $rules = [
+            $prefix.'nome'         => 'required|string',
+            $prefix.'email'         => 'required|email',
+            $prefix.'cpf'           => 'required',
+            $prefix.'dt_nascimento' => 'required',
+            $prefix.'sexo'          => 'required',
+            $prefix.'peso'          => 'required|numeric|min:0',
+            $prefix.'altura'        => 'required|numeric|min:0',
+            $prefix.'rua'       => 'required',
+            $prefix.'numero'    => 'required|numeric',
+            $prefix.'bairro'    => 'required',
+            $prefix.'cidade'    => 'required',
+            $prefix.'cep'       => 'required',
+            $prefix.'celular1'  => 'required',
+        ];
+
+        // Definição das mensagens de erro
+        $messages = [
+            $prefix.'nome.required' => 'O campo nome é obrigatório.',
+            $prefix.'nome.string' => 'Nome não pode conter números',
+            $prefix.'email.email' => 'Digite um endereço de e-mail válido.',
+            $prefix.'email.required' => 'O campo e-mail é obrigatório.',
+            $prefix.'cpf.required' => 'O campo CPF é obrigatório.',
+            $prefix.'dt_nascimento.required' => 'O campo Data de Nascimento é obrigatório.',
+            $prefix.'sexo.required' => 'O campo Gênero é obrigatório.',
+            $prefix.'peso.required' => 'O campo peso é obrigatório.',
+            $prefix.'peso.numeric' => 'O peso deve ser um valor numérico em kilogramas (Kg)',
+            $prefix.'peso.min' => 'O peso não pode ser um valor negativo',
+            $prefix.'altura.required' => 'O campo altura é obrigatório.',
+            $prefix.'altura.numeric' => 'O peso deve ser um valor numérico em metros (m)',
+            $prefix.'altura.min' => 'A altura não pode ser um valor negativo',
+            $prefix.'rua.required' => 'O campo rua na sessão endereço é obrigatório.',
+            $prefix.'numero.required' => 'O campo número na sessão endereço é obrigatório.',
+            $prefix.'numero.numeric' => 'O campo número deve ser um valor numérico',
+            $prefix.'bairro.required' => 'O campo bairro na sessão endereço é obrigatório.', 
+            $prefix.'cidade.required' => 'O campo cidade na sessão endereço é obrigatório.',
+            $prefix.'cep.required' => 'O campo cep na sessão endereço é obrigatório.',
+            $prefix.'celular1.required' => 'Pelo menos o campo Celular 1 é obrigatório',
+        ];
+
+        // Validação dos campos
+        $validationResult = ValidationService::validateFields($data, $rules, $messages);
+
+        if ($validationResult !== true) {
+            return response()->json(['errors' => $validationResult], 422); // HTTP status code for validation errors
+        }
+
+        return true;
+    }
 }

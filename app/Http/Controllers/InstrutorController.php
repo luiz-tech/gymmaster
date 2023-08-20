@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
+//serviço personalizado de validação
+use App\Services\ValidationService;
+
 //usando modelos
 use App\Models\Pessoas;
 use App\Models\Instrutores;
@@ -34,7 +37,7 @@ class InstrutorController extends Controller
                 'pessoas.id as id_pessoa_master',
                 'pessoas.nome',
                 'pessoas.email',
-                'pessoas.senha',
+                'pessoas.password',
                 'pessoas.cpf',
                 'pessoas.dt_nascimento',
                 'pessoas.sexo',
@@ -88,6 +91,15 @@ class InstrutorController extends Controller
 
     public function new_instrutor(Request $request)
     {
+
+        // Validação dos campos
+        $validationResult = $this->validateInstrutores($request->all(),'novo_');
+
+        if ($validationResult !== true)
+        {
+            return $validationResult;
+        }
+
         try {
             // Dados do formulário de cadastro de novo Instrutor
             $instrutorData = $request->except('_token');
@@ -95,8 +107,8 @@ class InstrutorController extends Controller
             // Inserir na tabela pessoas
             $pessoaId = Pessoas::insertGetId([
                 'nome' => $instrutorData['novo_nome'],
-                'email' => $instrutorData['novo_email'],
-                'senha' => Hash::make(Str::random(6)),
+                'email' => Str::trim($instrutorData['novo_email']),
+                'password' => Hash::make(Str::random(6)),
                 'cpf' => $instrutorData['novo_cpf'],
                 'dt_nascimento' => $instrutorData['novo_dt_nascimento'],
                 'sexo' => $instrutorData['novo_sexo'],
@@ -145,7 +157,15 @@ class InstrutorController extends Controller
     }
 
     public function edit_instrutor(Request $request)
-    {
+    {   
+        // Validação dos campos
+        $validationResult = $this->validateInstrutores($request->all(),null);
+
+        if ($validationResult !== true)
+        {
+            return $validationResult;
+        }
+
         try {
             $instrutorData = $request->except('_token');
 
@@ -153,7 +173,7 @@ class InstrutorController extends Controller
             Pessoas::where('id', $instrutorData['instrutor_id'])
                 ->update([
                     'nome' => $instrutorData['nome'],
-                    'email' => $instrutorData['email'],
+                    'email' => Str::trim($instrutorData['email']),
                     'cpf' => $instrutorData['cpf'],
                     'dt_nascimento' => $instrutorData['dt_nascimento'],
                     'sexo' => $instrutorData['sexo'],
@@ -195,6 +215,58 @@ class InstrutorController extends Controller
         } catch (Exception $e) {
             return response()->json(['error' => 'Erro ao editar instrutor']);
         } 
+    }
+
+    // Validar os campos específicos dos alunos
+    public function validateInstrutores($data,$prefix)
+    {   
+        // Definição das regras de integridade
+        $rules = [
+            $prefix.'nome'          => 'required|string',
+            $prefix.'email'         => 'required|email',
+            $prefix.'cpf'           => 'required',
+            $prefix.'dt_nascimento' => 'required',
+            $prefix.'sexo'          => 'required',
+            $prefix.'especialidade' => 'required',
+            $prefix.'salario'       => 'required|numeric|min:0',
+            $prefix.'rua'       => 'required',
+            $prefix.'numero'    => 'required|numeric',
+            $prefix.'bairro'    => 'required',
+            $prefix.'cidade'    => 'required',
+            $prefix.'cep'       => 'required',
+            $prefix.'celular1'  => 'required',
+        ];
+
+        // Definição das mensagens de erro
+        $messages = [
+            $prefix.'nome.required' => 'O campo nome é obrigatório.',
+            $prefix.'nome.string' => 'Nome não pode conter números',
+            $prefix.'email.email' => 'Digite um endereço de e-mail válido.',
+            $prefix.'email.required' => 'O campo e-mail é obrigatório.',
+            $prefix.'cpf.required' => 'O campo CPF é obrigatório.',
+            $prefix.'dt_nascimento.required' => 'O campo Data de Nascimento é obrigatório.',
+            $prefix.'sexo.required' => 'O campo Gênero é obrigatório.',
+            $prefix.'salario.required' => 'O campo salario é obrigatório.',
+            $prefix.'salario.numeric' => 'O salario deve ser um valor numérico em reais (R$)',
+            $prefix.'salario.min' => 'O salario não pode ser um valor negativo',
+            $prefix.'especialidade.required' => 'O campo especialidade é obrigatório.',
+            $prefix.'rua.required' => 'O campo rua na sessão endereço é obrigatório.',
+            $prefix.'numero.required' => 'O campo número na sessão endereço é obrigatório.',
+            $prefix.'numero.numeric' => 'O campo número deve ser um valor numérico',
+            $prefix.'bairro.required' => 'O campo bairro na sessão endereço é obrigatório.', 
+            $prefix.'cidade.required' => 'O campo cidade na sessão endereço é obrigatório.',
+            $prefix.'cep.required' => 'O campo cep na sessão endereço é obrigatório.',
+            $prefix.'celular1.required' => 'Pelo menos o campo Celular 1 é obrigatório',
+        ];
+
+        // Validação dos campos
+        $validationResult = ValidationService::validateFields($data, $rules, $messages);
+
+        if ($validationResult !== true) {
+            return response()->json(['errors' => $validationResult], 422); // HTTP status code for validation errors
+        }
+
+        return true;
     }
 
 }

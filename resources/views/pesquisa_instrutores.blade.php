@@ -6,10 +6,10 @@
   <section class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
-        <div class="col-sm-6">
+        <div class="col-sm-5">
           <h1>Lista de Instrutores</h1>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-7">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item">
               <a class="btn btn-md btn-success btnNovoInstrutor" type="button" href="#"><i class="fas fa-plus"></i> Novo Instrutor</a>
@@ -103,7 +103,7 @@
 </div>
 <!-- /.content-wrapper -->
 
-<!-- Janela Modal da ficha do Instrutor --> 
+
 
 <!-- Modal de Edição do Instrutor -->
 <div class="modal fade" id="modalEditarInstrutor" tabindex="-1" role="dialog" aria-labelledby="modalEditarInstrutorLabel" aria-hidden="true">
@@ -122,22 +122,22 @@
           <input type="hidden" name="instrutor_id" id="instrutor_id">
 
           <hr>
-          <h4>Dados Pessoais</h4>
+          <h4>Dados Pessoais | <i class="fa fa-user" aria-hidden="true"></i></h4>
           <!-- Dados Pessoais -->
           <div class="row mb-3 pt-3 border-top border-primary">
             <div class="col-md-6">
               <label for="nome">Nome</label>
-              <input type="text" class="form-control" id="nome" name="nome" required>
+              <input type="text" class="form-control" id="nome" name="nome" required placeholder="Digite o nome">
             </div>
             <div class="col-md-6">
               <label for="email">E-mail</label>
-              <input type="email" class="form-control" id="email" name="email" required>
+              <input type="email" class="form-control" id="email" name="email" required placeholder="Digite o e-mail">
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="cpf">CPF</label>
-              <input type="text" class="form-control" id="cpf" name="cpf" required>
+              <input type="text" class="form-control" id="cpf" name="cpf" required placeholder="Digite o CPF">
             </div>
             <div class="col-md-6">
               <label for="dt_nascimento">Data de Nascimento</label>
@@ -147,86 +147,88 @@
           <div class="row mb-3">
             <div class="col-md-3">
               <label for="status">Status</label>
-                <select class="form-control" id="status" name="status" required>
-                  <option value="A">Ativo</option>
-                  <option value="I">Inativo</option>
-                </select>
+              <select class="form-control" id="status" name="status" required>
+                <option value="A">Ativo</option>
+                <option value="I">Inativo</option>
+              </select>
             </div>
             <div class="col-md-3">
               <label for="sexo">Gênero</label>
-                <select class="form-control" id="sexo" name="sexo" required>
-                  <option value="M">Masculino</option>
-                  <option value="F">Feminino</option>
-                  <option value="O">Outro</option>
-                </select>
+              <select class="form-control" id="sexo" name="sexo" required>
+                <option value="">Selecione o Gênero</option>
+                <option value="M">Masculino</option>
+                <option value="F">Feminino</option>
+                <option value="O">Outro</option>
+              </select>
             </div>
             <div class="col-md-3">
-                    <label for="salario">Salário</label>
-                    <input type="number" step="any" class="form-control" id="salario" name="salario" required />
-                </div>
-                <div class="col-md-3">
-                    <label for="especialidade">Especialidade</label>
-                    <select class="form-control" id="especialidade" name="especialidade" required>
-                        <option value="">Selecione um Especialidade</option>
-                        <option value="Musculação">Musculação</option>
-                        <option value="Dança">Dança</option>
-                        <option value="Natação">Natação</option>
-                        <option value="Hidroginástica">Hidroginástica</option>
-                        <option value="Crossfit">Crossfit</option>
-                    </select>
-                </div>
+              <label for="salario">Salário</label>
+              <input type="number" step="any" class="form-control" id="salario" name="salario" required placeholder="Digite o salário">
+            </div>
+            <div class="col-md-3">
+              <label for="especialidade">Especialidade</label>
+              <select class="form-control" id="especialidade" name="especialidade" required>
+                <option value="">Selecione uma Especialidade</option>
+                <option value="Musculação">Musculação</option>
+                <option value="Dança">Dança</option>
+                <option value="Natação">Natação</option>
+                <option value="Hidroginástica">Hidroginástica</option>
+                <option value="Crossfit">Crossfit</option>
+                
+              </select>
+            </div>
           </div>
-          
+
           <!-- Endereço -->
-          <h4>Endereço</h4>
+          <h4>Endereço | <i class="fa fa-map-marker" aria-hidden="true"></i></h4>
           <div class="row mb-3 pt-3 border-top border-primary">
             <div class="col-md-6">
               <label for="rua">Rua</label>
-              <input type="text" class="form-control" id="rua" name="rua">
+              <input type="text" class="form-control" id="rua" name="rua" placeholder="Digite a rua">
             </div>
             <div class="col-md-6">
               <label for="numero">Número</label>
-              <input type="text" class="form-control" id="numero" name="numero">
+              <input type="text" class="form-control" id="numero" name="numero" placeholder="Digite o número">
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="complemento">Complemento</label>
-              <input type="text" class="form-control" id="complemento" name="complemento">
+              <input type="text" class="form-control" id="complemento" name="complemento" placeholder="Digite o complemento">
             </div>
             <div class="col-md-6">
               <label for="bairro">Bairro</label>
-              <input type="text" class="form-control" id="bairro" name="bairro">
+              <input type="text" class="form-control" id="bairro" name="bairro" placeholder="Digite o bairro">
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="cidade">Cidade</label>
-              <input type="text" class="form-control" id="cidade" name="cidade">
+              <input type="text" class="form-control" id="cidade" name="cidade" placeholder="Digite a cidade">
             </div>
             <div class="col-md-6">
               <label for="cep">CEP</label>
-              <input type="text" class="form-control" id="cep" name="cep">
+              <input type="text" class="form-control" id="cep" name="cep" placeholder="Digite o CEP">
             </div>
           </div>
 
           <!-- Contato -->
-          <h4>Contato</h4>
+          <h4>Contato | <i class="fa fa-phone" aria-hidden="true"></i></h4>
           <div class="row pt-3 mb-3 border-top border-primary">
             <div class="col-md-6">
               <label for="celular1">Celular 1</label>
-              <input type="text" class="form-control" id="celular1" name="celular1">
+              <input type="text" class="form-control" id="celular1" name="celular1" placeholder="Digite o celular 1">
             </div>
             <div class="col-md-6">
               <label for="celular2">Celular 2</label>
               <small>Opcional</small>
-              <input type="text" class="form-control" id="celular2" name="celular2">
+              <input type="text" class="form-control" id="celular2" name="celular2" placeholder="Digite o celular 2 (opcional)">
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-12">
               <label for="instagram">Usuário Instagram</label>
-              <input type="text" class="form-control" id="instagram" name="instagram">
+              <input type="text" class="form-control" id="instagram" name="instagram" placeholder="Digite o usuário do Instagram">
             </div>
           </div>
 
@@ -255,22 +257,22 @@
         <form id="formNovoInstrutor" method="POST">
             @csrf
             <hr>
-            <h4>Dados Pessoais</h4>
+            <h4>Dados Pessoais | <i class="fa fa-user" aria-hidden="true"></i></h4>
             <!-- Dados Pessoais -->
             <div class="row mb-3 pt-3 border-top border-primary">
                 <div class="col-md-6">
                     <label for="novo_nome">Nome</label>
-                    <input type="text" class="form-control" id="novo_nome" name="novo_nome" required>
+                    <input type="text" class="form-control" id="novo_nome" name="novo_nome" required placeholder="Digite o nome">
                 </div>
                 <div class="col-md-6">
                     <label for="novo_email">E-mail</label>
-                    <input type="email" class="form-control" id="novo_email" name="novo_email" required>
+                    <input type="email" class="form-control" id="novo_email" name="novo_email" required placeholder="Digite o e-mail">
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="novo_cpf">CPF</label>
-                    <input type="text" class="form-control" id="novo_cpf" name="novo_cpf" required>
+                    <input type="text" class="form-control" id="novo_cpf" name="novo_cpf" required placeholder="Digite o CPF">
                 </div>
                 <div class="col-md-6">
                     <label for="novo_dt_nascimento">Data de Nascimento</label>
@@ -295,7 +297,7 @@
                 </div>
                 <div class="col-md-3">
                     <label for="novo_salario">Salário</label>
-                    <input type="number" step="any" class="form-control" id="novo_salario" name="novo_salario" required />
+                    <input type="number" step="any" class="form-control" id="novo_salario" name="novo_salario" required placeholder="Digite o salário" />
                 </div>
                 <div class="col-md-3">
                     <label for="novo_especialidade">Especialidade</label>
@@ -311,54 +313,57 @@
             </div>
        
             <!-- Endereço -->
-            <h4>Endereço</h4>
+            <h4>Endereço | <i class="fa fa-map-marker" aria-hidden="true"></i></h4>
             <div class="row mb-3 pt-3 border-top border-primary">
                 <div class="col-md-6">
                     <label for="novo_rua">Rua</label>
-                    <input type="text" class="form-control" id="novo_rua" name="novo_rua">
+                    <input type="text" class="form-control" id="novo_rua" name="novo_rua" placeholder="Digite a rua">
                 </div>
                 <div class="col-md-6">
                     <label for="novo_numero">Número</label>
-                    <input type="text" class="form-control" id="novo_numero" name="novo_numero">
+                    <input type="text" class="form-control" id="novo_numero" name="novo_numero" placeholder="Digite o número">
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="novo_complemento">Complemento</label>
-                    <input type="text" class="form-control" id="novo_complemento" name="novo_complemento">
+                    <small> Opcional</small>
+                    <input type="text" class="form-control" id="novo_complemento" name="novo_complemento" placeholder="Digite o complemento">
                 </div>
                 <div class="col-md-6">
                     <label for="novo_bairro">Bairro</label>
-                    <input type="text" class="form-control" id="novo_bairro" name="novo_bairro">
+                    <input type="text" class="form-control" id="novo_bairro" name="novo_bairro" placeholder="Digite o bairro">
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="novo_cidade">Cidade</label>
-                    <input type="text" class="form-control" id="novo_cidade" name="novo_cidade">
+                    <input type="text" class="form-control" id="novo_cidade" name="novo_cidade" placeholder="Digite a cidade">
                 </div>
                 <div class="col-md-6">
                     <label for="novo_cep">CEP</label>
-                    <input type="text" class="form-control" id="novo_cep" name="novo_cep">
+                    <input type="text" class="form-control" id="novo_cep" name="novo_cep" placeholder="Digite o CEP">
                 </div>
             </div>
 
             <!-- Contato -->
-            <h4>Contato</h4>
+            <h4>Contato | <i class="fa fa-phone" aria-hidden="true"></i></h4>
             <div class="row pt-3 mb-3 border-top border-primary">
                 <div class="col-md-6">
                     <label for="novo_celular1">Celular 1</label>
-                    <input type="text" class="form-control" id="novo_celular1" name="novo_celular1">
+                    <input type="text" class="form-control" id="novo_celular1" name="novo_celular1" placeholder="Digite o celular 1">
                 </div>
                 <div class="col-md-6">
                     <label for="novo_celular2">Celular 2</label>
-                    <input type="text" class="form-control" id="novo_celular2" name="novo_celular2">
+                    <small> Opcional</small>
+                    <input type="text" class="form-control" id="novo_celular2" name="novo_celular2" placeholder="Digite o celular 2">
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-12">
                     <label for="novo_instagram">Usuário Instagram</label>
-                    <input type="text" class="form-control" id="novo_instagram" name="novo_instagram">
+                    <small> Opcional</small>
+                    <input type="text" class="form-control" id="novo_instagram" name="novo_instagram" placeholder="Digite o usuário do Instagram">
                 </div>
             </div>
 
@@ -372,6 +377,8 @@
     </div>
   </div>
 </div>
+
+
 
 {{ view('footer') }}
 
@@ -549,8 +556,23 @@
                 location.reload(); 
             },
             error: function(error) {
-                // Lógica de erro, se necessário
-                console.error('Erro na edição: ' + error.responseText);
+                if (error.responseJSON && error.responseJSON.errors) {
+                    // Monta a mensagem de erro
+                    var errorMessage = '';
+                    for (var field in error.responseJSON.errors) {
+                        errorMessage += error.responseJSON.errors[field].join('<br>') + '<br>'; 
+                    }
+
+                    //Exibe os erros
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro de validação',
+                        html: errorMessage,
+                    });
+                } else {
+                    //Lógica de erro, se necessário
+                    console.log(error);
+                }
             }
         });
     });
@@ -592,8 +614,23 @@
                 location.reload();               
             },
             error: function(error) {
-                // Lógica de erro, se necessário
-                console.log(error.responseText);
+                if (error.responseJSON && error.responseJSON.errors) {
+                    // Monta a mensagem de erro
+                    var errorMessage = '';
+                    for (var field in error.responseJSON.errors) {
+                        errorMessage += error.responseJSON.errors[field].join('<br>') + '<br>'; 
+                    }
+
+                    //Exibe os erros
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro de validação',
+                        html: errorMessage,
+                    });
+                } else {
+                    //Lógica de erro, se necessário
+                    console.log(error);
+                }
             }
         });
     });

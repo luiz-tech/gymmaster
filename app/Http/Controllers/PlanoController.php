@@ -27,7 +27,7 @@ class PlanoController extends Controller
     {
         try {
             
-            Planos::where('id','=',$request->id)->update([
+            Planos::where('id','=',$request->idplano)->update([
 
                 'plano' => $request->nomeplano,
                 'mensalidade' => $request->mensalidade,

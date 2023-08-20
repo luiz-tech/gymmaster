@@ -197,6 +197,7 @@
 		$('#descricao').val(plano.descricao);
 
 		$('#modalEditarPlano').modal('show');
+
 	 	
 	} 
 
@@ -204,7 +205,7 @@
 		
 		var formData = $('#formEditarPlano').serialize();
 
-		$.ajaxSetup({
+		    $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             }
@@ -261,7 +262,7 @@
             url: "{{ route('Excluir Plano') }}",
             data: {'id':id},
             success: function(response) {
-                alert(response);
+                locaton.reload();
             },
             error: function(error) {
                 console.error("Erro ao carregar os dados do gráfico:", error);

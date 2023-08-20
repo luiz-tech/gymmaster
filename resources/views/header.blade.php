@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ Route::currentRouteName() }} | {{ env('APP_NAME') }}</title>
 
+  <link rel="shortcut icon" href="resources/images/logo-white.png">
+
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -79,7 +81,7 @@
         <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="#" class="d-block">{{ session('nome') }}</a>
+        <a href="#" class="d-block"><?php session_start(); print_r($_SESSION); ?></a>
       </div>
     </div>
 
@@ -114,7 +116,7 @@
           </ul>
         </li>
 
-        <!-- Alunos -->
+        <!-- Instrutores -->
         <li class="nav-item menu-close">
           <a href="#" class="nav-link active">
             <i class="nav-icon fas fa-users"></i>
@@ -143,11 +145,27 @@
         </li>
 
         <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-th"></i>
-            <p>Gym Treinos<span class="right badge badge-danger">{{ App\Models\Planos::count() }}</span></p>
+          <a href="{{ route('Lista de Planos') }}" class="nav-link">
+            <i class="nav-icon fa fa-bolt text-warning" aria-hidden="true"></i>
+            <p>Gym Planos <span class="right badge badge-danger">{{ App\Models\Planos::count() }}</span></p>
           </a>
         </li>
+
+        <!-- Financeiro -->
+        <li class="nav-item">
+          <a href="{{ route('Pagamentos') }}" class="nav-link">
+           <i class="nav-icon fa fa-cart-arrow-down text-success" aria-hidden="true"></i>
+            <p>Financeiro</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="{{ route('Logout') }}" class="nav-link">
+            <i class="nav-icon fa fa-power-off text-danger" aria-hidden="true"></i>
+            <p>Sair<span class="right badge badge-danger"></p>
+          </a>
+        </li>
+        
 
       </ul>
     </nav>

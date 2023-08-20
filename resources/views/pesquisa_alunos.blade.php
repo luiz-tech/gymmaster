@@ -113,7 +113,7 @@
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="modalEditarAlunoLabel">Ficha de Matrícula do Aluno <i class="fa fa-user-plus" aria-hidden="true"></i></h4>
+        <h4 class="modal-title" id="modalEditarAlunoLabel">Ficha de Matrícula do Aluno</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -166,17 +166,17 @@
             </div>
             <div class="col-md-3">
                 <label for="peso">Peso (Kg)</label>
-                <input type="number" step="any" class="form-control" id="peso" name="peso" placeholder="Informe o Peso em kilogramas" required>
+                <input type="number" step="any" min="0" class="form-control" id="peso" name="peso" placeholder="Informe o Peso em kilogramas" required>
             </div>
             <div class="col-md-3">
                 <label for="altura">Altura (m)</label>
-                <input type="text" class="form-control" id="altura" name="altura" placeholder="Informe a altura em metros"  required>
+                <input type="number" step="any" min="0" class="form-control" id="altura" name="altura" placeholder="Informe a altura em metros"  required>
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-8">
               <label for="objetivos">Objetivos</label>
-              <textarea rows="4" class="form-control" id="objetivos" name="objetivos" placeholder="Descreva brevemente os objetivos desse aluno com sua matrícula na academia Gymmaster"  required></textarea>
+              <textarea rows="4" class="form-control" id="objetivos" name="objetivos" placeholder="Descreva brevemente os objetivos desse aluno com sua matrícula na academia {{ env('APP_NAME') }}"  required></textarea>
             </div>
             <div class="col-4">
               <label for="plano">Planos</label>
@@ -257,7 +257,7 @@
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="modalEditarAlunoLabel">Cadastre Nova Ficha de Matrícula do Aluno <i class="fa fa-user-plus" aria-hidden="true"></i></h4>
+        <h4 class="modal-title" id="modalEditarAlunoLabel">Cadastre um Novo Aluno</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -300,18 +300,17 @@
                 <div class="col-md-3">
                     <label for="novo_sexo">Gênero</label>
                     <select class="form-control" id="novo_sexo" name="novo_sexo" required>
-                        <option value="">Selecione o Gênero</option>
                         <option value="M">Masculino</option>
                         <option value="F">Feminino</option>
                         <option value="O">Outro</option>
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label for="novo_sexo">Peso (Kg)</label>
+                    <label for="novo_peso">Peso (Kg)</label>
                     <input type="float" class="form-control" id="novo_peso" name="novo_peso" placeholder="Informe o Peso em kilogramas" required>
                 </div>
                 <div class="col-md-3">
-                    <label for="novo_sexo">Altura (m)</label>
+                    <label for="novo_altura">Altura (m)</label>
                     <input type="text" class="form-control" id="novo_altura" name="novo_altura" placeholder="Informe a altura em metros"  required>
                 </div>
             </div>
@@ -323,7 +322,6 @@
               <div class="col-4">
                 <label for="novo_plano">Planos</label>
                 <select class="form-control" id="novo_plano" name="novo_plano" required>
-                    <option value="">Selecione um Plano</option>
                     @foreach($planos as $plano)
                       <option value="{{ $plano->id }}">{{ $plano->plano}}</option>
                     @endforeach
@@ -492,7 +490,7 @@
       },
       error: function (error) {
         //exclusão com erro
-        console.error('Erro ao excluir o aluno -- '+error);
+        console.log(error);
       }
     });
   }
@@ -570,9 +568,6 @@
       // Máscara do CPF
       $('#cpf').mask('000.000.000-00');
 
-      // Máscara da Altura
-      $('#altura').mask('0.00');
-
       $('#modalEditarAluno').modal('show');
     }
 
@@ -601,13 +596,27 @@
             data: formData,
             success: function(response) {
                 // Lógica de sucesso, se necessário
-                console.log('Edição realizada com sucesso.');
                 $('#modalEditarAluno').modal('hide');
                 location.reload(); 
             },
             error: function(error) {
-                // Lógica de erro, se necessário
-                console.error('Erro na edição: ' + error.responseText);
+                if (error.responseJSON && error.responseJSON.errors) {
+                    // Monta a mensagem de erro
+                    var errorMessage = '';
+                    for (var field in error.responseJSON.errors) {
+                        errorMessage += error.responseJSON.errors[field].join('<br>') + '<br>'; 
+                    }
+
+                    //Exibe os erros
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro de validação',
+                        html: errorMessage,
+                    });
+                } else {
+                    //Lógica de erro, se necessário
+                    console.log(error);
+                }
             }
         });
     });
@@ -628,14 +637,11 @@
       //máscara dos telefone
       $('#novo_celular1, #novo_celular2').mask('(00)00000-0000');
 
-      // Máscara da Altura
-      $('novo_#altura').mask('0.00');
-
       $('#modalNovoAluno').modal('show');
 
     });
 
-  // envio da requisição para permaneer os dados do aluno
+    // envio da requisição para permaneer os dados do aluno
     $('#btnSalvarNovo').click(function() {
         // Serializar o formulário
         var formData = $('#formNovoAluno').serialize();
@@ -647,13 +653,28 @@
             data: formData,
             success: function(response) {
                 // Lógica de sucesso, se necessário
-                console.log('Edição realizada com sucesso.');
+                console.log('Cadastro realizado com sucesso');
                 $('#modalEditarAluno').modal('hide');
                 location.reload();               
             },
             error: function(error) {
-                // Lógica de erro, se necessário
-                console.error('Erro na criação: ' + error.responseText);
+                if (error.responseJSON && error.responseJSON.errors) {
+                    // Monta a mensagem de erro
+                    var errorMessage = '';
+                    for (var field in error.responseJSON.errors) {
+                        errorMessage += error.responseJSON.errors[field].join('<br>') + '<br>'; 
+                    }
+
+                    //Exibe os erros
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro de validação',
+                        html: errorMessage,
+                    });
+                } else {
+                    //Lógica de erro, se necessário
+                    console.log(error);
+                }
             }
         });
     });
