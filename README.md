@@ -1,10 +1,10 @@
 # Sistema de Gerenciamento de Academia
 
-Este é um sistema de gerenciamento de academia construído usando o framework Laravel e o template AdminLTE para a interface de usuário.
+Este é um sistema de gerenciamento de academia construído usando o framework Laravel na sua versão 8x e PHP 7.4 e o template AdminLTE para a interface de usuário.
 
 ## Características Principais
 
-- Autenticação por login e senha.
+- Autenticação por login e senha valendo-se do recurso Auth
 - Manipulação de sessão para dados do usuário autenticado.
 - Níveis de permissão de usuário para acesso controlado.
 - Herança de dados para diferentes entidades do sistema.
@@ -39,16 +39,16 @@ O banco de dados é estruturado da seguinte forma:
 
 ## API e Webhooks
 
-- Uma API foi criada para fornecer o histórico de pagamentos.
-- Autenticação JWT é usada para proteger as rotas da API.
+- Uma API foi criada para fornecer o histórico de pagamentos simulando que os planos disponíveis estivessem publicados e aptos à venda na plataforma da Eduzz
+- Autenticação é usada para proteger as rotas da API.
 - Exemplo de uso de webhooks para processamento de pagamentos.
 
-## Outras Funcionalidades Propostas
+## Possibilidades de Expansão do Projeto
 
-- Implementação de diferentes APIs para obter informações sobre alunos, instrutores, planos, etc.
-- Discussão sobre segurança da API e autenticação JWT.
-- Utilização do componente modal do AdminLTE para exibição de informações.
-- Discussão sobre estratégias de design responsivo.
+1. Inclusão de Imagens de Perfil - Permita que os usuários façam o upload de fotos para seus perfis.
+2. Upload de Arquivos - Implemente a capacidade de os alunos enviarem exames, laudos médicos e outros documentos relevantes, armazenando esses arquivos de forma segura e acessível.
+3. Tabela de Dados de Saúde - Introduza uma tabela específica para dados de saúde do aluno, como histórico médico, alergias e restrições.
+4. Sistema de Cobrança Integrado - Desenvolva um sistema de cobrança de mensalidades integrado. Envie lembretes de pagamento via WhatsApp ou e-mail e até outros canais
 
 ## Como Iniciar o Projeto
 
@@ -60,3 +60,6 @@ O banco de dados é estruturado da seguinte forma:
 6. Execute `php artisan serve` para iniciar o servidor local.
 
 Sinta-se à vontade para explorar as funcionalidades e personalizar o sistema de acordo com suas necessidades.
+
+
+
