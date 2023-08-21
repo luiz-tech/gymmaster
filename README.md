@@ -1,4 +1,6 @@
+# GymMaster 
 # Sistema de Gerenciamento de Academia
+
 
 Este é um sistema de gerenciamento de academia construído usando o framework Laravel na sua versão 8x e PHP 7.4 e o template AdminLTE para a interface de usuário.
 
