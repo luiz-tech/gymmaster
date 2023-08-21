@@ -219,7 +219,23 @@
                 location.reload();
             },
             error: function(error) {
-                console.error("Erro ao carregar os dados do gráfico:", error);
+                if (error.responseJSON && error.responseJSON.errors) {
+                    // Monta a mensagem de erro
+                    var errorMessage = '';
+                    for (var field in error.responseJSON.errors) {
+                        errorMessage += error.responseJSON.errors[field].join('<br>') + '<br>'; 
+                    }
+
+                    //Exibe os erros
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro de validação',
+                        html: errorMessage,
+                    });
+                } else {
+                    //Lógica de erro, se necessário
+                    console.log(error);
+                }
             }
         });	
 
@@ -291,17 +307,30 @@
         $.ajax({
             type: "POST",
             url: "{{ route('Novo Plano') }}",
-     		data: formData ,
-            success: function(response) {
- 				if(response === true){
- 					location.reload();
- 				}
- 				else {
- 					alert('erro');
- 				}
-            },
-            error: function(error) {
-                console.error("Erro criar novo Plano", error);
+     		     data: formData ,
+              success: function(response) {
+         				if(response === true){
+         					location.reload();
+         				}
+              },
+              error: function(error) {
+                if (error.responseJSON && error.responseJSON.errors) {
+                    // Monta a mensagem de erro
+                    var errorMessage = '';
+                    for (var field in error.responseJSON.errors) {
+                        errorMessage += error.responseJSON.errors[field].join('<br>') + '<br>'; 
+                    }
+
+                    //Exibe os erros
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro de validação',
+                        html: errorMessage,
+                    });
+                } else {
+                    //Lógica de erro, se necessário
+                    console.log(error);
+                }
             }
         });
 

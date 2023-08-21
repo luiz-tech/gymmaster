@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+//serviço personalizado de validação
+use App\Services\ValidationService;
+
 //usando modelos
 use App\Models\Planos;
 
@@ -24,7 +27,15 @@ class PlanoController extends Controller
     }
 
     public function edit_planos(Request $request)
-    {
+    {   
+        // Validação dos campos
+        $validationResult = $this->validatePlanos($request->all(),null);
+
+        if ($validationResult !== true)
+        {
+            return $validationResult;
+        }
+
         try {
             
             Planos::where('id','=',$request->idplano)->update([
@@ -43,7 +54,15 @@ class PlanoController extends Controller
     }
 
     public function new_planos(Request $request)
-    {
+    {   
+        // Validação dos campos
+        $validationResult = $this->validatePlanos($request->all(),'novo_');
+
+        if ($validationResult !== true)
+        {
+            return $validationResult;
+        }
+
         try {
             
             Planos::insert([
@@ -61,5 +80,33 @@ class PlanoController extends Controller
         } catch (Exception $e) {
             return response()->json($e);    
         }    
+    }
+
+
+    // Validar os campos específicos dos alunos
+    public function validatePlanos($data,$prefix)
+    {   
+        // Definição das regras de integridade
+        $rules = [
+            $prefix.'nomeplano'     => 'required',
+            $prefix.'mensalidade'   => 'required',
+            $prefix.'descricao'     => 'required',
+        ];
+
+        // Definição das mensagens de erro
+        $messages = [
+            $prefix.'nomeplano.required' => 'O campo nome é obrigatório.',
+            $prefix.'descricao.required' => 'O campo descrição é obrigatório.',
+            $prefix.'mensalidade.required' => 'O campo mensalidade é obrigatório.',
+        ];
+
+        // Validação dos campos
+        $validationResult = ValidationService::validateFields($data, $rules, $messages);
+
+        if ($validationResult !== true) {
+            return response()->json(['errors' => $validationResult], 422); // HTTP status code for validation errors
+        }
+
+        return true;
     }
 }

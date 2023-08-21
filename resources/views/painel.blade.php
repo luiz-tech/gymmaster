@@ -31,7 +31,7 @@
                 <p>Alunos Matriculados</p>
               </div>
               <div class="icon">
-                <i class="ion ion-bag"></i>
+                <i class="fa fa-check-square" aria-hidden="true"></i>
               </div>
               <a href="{{ route('Lista de Alunos', ['status' => 'all']) }}" class="small-box-footer">Veja Mais<i class="fas fa-arrow-circle-right"></i></a>
             </div>
@@ -48,7 +48,7 @@
                 <p>Alunos Ativos</p>
               </div>
               <div class="icon">
-                <i class="ion ion-stats-bars"></i>
+                <i class="fa fa-user" aria-hidden="true"></i>
               </div>
               <a href="{{ route('Lista de Alunos', ['status' => 'a']) }}" class="small-box-footer">Veja Mais<i class="fas fa-arrow-circle-right"></i></a>
             </div>
@@ -65,7 +65,7 @@
                 <p>Alunos Inativos</p>
               </div>
               <div class="icon">
-                <i class="ion ion-person-add"></i>
+                <i class="fa fa-user-times" aria-hidden="true"></i>
               </div>
               <a href="{{ route('Lista de Alunos', ['status' => 'i']) }}" class="small-box-footer">Veja Mais<i class="fas fa-arrow-circle-right"></i></a>
             </div>
@@ -80,7 +80,7 @@
                 <p>Planos</p>
               </div>
               <div class="icon">
-                <i class="ion ion-pie-graph"></i>
+                <i class="fa fa-bolt" aria-hidden="true"></i>
               </div>
               <a href="{{ route('Lista de Planos') }}" class="small-box-footer">Veja Mais<i class="fas fa-arrow-circle-right"></i></a>
             </div>
@@ -197,40 +197,42 @@
     }
 
     function renderChart(data) {
-      var dayLabels = data.map(item => getDayName(item.day)); // Função para obter o nome do dia da semana
+      var dayMonthLabels = data.map(item => item.day_month);
 
       var ctx = document.getElementById("line-chart").getContext("2d");
       var myChart = new Chart(ctx, {
-          type: "line",
-          data: {
-              labels: dayLabels,
-              datasets: [
-                  {
-                      label: "Alunos Matriculados",
-                      data: data.map(item => item.student_count),
-                      borderColor: "rgba(0, 255, 89, 1)",
-                      backgroundColor: "rgba(182, 230, 240, 0.2)",
-                      borderWidth: 1,
-                  },
-              ],
+        type: "line",
+        data: {
+          labels: dayMonthLabels,
+          datasets: [
+            {
+              label: "Alunos Matriculados",
+              data: data.map(item => item.student_count),
+              borderColor: "rgba(0, 255, 89, 1)",
+              backgroundColor: "rgba(182, 230, 240, 0.2)",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              stepSize: 10,
+            },
           },
-          options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: {
-                  y: {
-                      beginAtZero: true,
-                      stepSize: 10,
-                  },
-              },
-          },
+        },
       });
     }
+
+
 
     //função auxiliar ao gráfico
     function getDayName(dayNumber) {
       var daysOfWeek = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
-      return daysOfWeek[dayNumber - 1];
+      return daysOfWeek[dayNumber];
     }
 
 </script>

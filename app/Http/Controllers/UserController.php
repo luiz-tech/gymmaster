@@ -32,25 +32,37 @@ class UserController extends Controller
 
         if ($user) 
         {  
-            if(Hash::check($password, $user->password))
+            if (Hash::check($password, $user->password))
             {
-                //realizar login do usuario
-                Auth::login($user);
+                
+                if(($user->status !== 'IA') || ($user->status !== 'AA'))
+                {
+                    // realizar login do usuário
+                    Auth::login($user);
 
-                Session::put($user->toArray());
+                    // Armazenar dados na sessão
+                    Session::put($user->toArray());
 
-                return redirect()->intended('/painel');
-            
+                    //dd(Session::all());
+
+                    return redirect()->intended('/painel');
+
+                } else {
+                    // email incorreto
+                    return back()->withErrors(['nivel' => 'Usuário Não Permtido']);
+                } 
+
             } else {
                 // email incorreto
-                return back()->withErrors(['email' => 'E-mail Inválido.']);
+                return back()->withErrors(['senha' => 'Senha Incorreta.']);
             }
             
         } else {
             // senha incorreta
-            return back()->withErrors(['senha' => 'Senha Incorreta.']);
+            return back()->withErrors(['email' => 'E-mail Não Cadastrado.']);
         }
     }
+
 
     public function user_logout()
     {
@@ -140,7 +152,7 @@ class UserController extends Controller
             Pessoas::where('id', $alunoId)
                 ->update([
                     'nome' => $request->input('nome'),
-                    'email' => Str::trim($request->input('email')),
+                    'email' =>trim($request->input('email')),
                     'cpf' => $request->input('cpf'),
                     'dt_nascimento' => $request->input('dt_nascimento'),
                     'status' => $request->input('status'),
@@ -226,7 +238,7 @@ class UserController extends Controller
             // Inserir na tabela "pessoas"
             $pessoaId = DB::table('pessoas')->insertGetId([
                 'nome' => $alunoData['novo_nome'],
-                'email' => Str::trim($alunoData['novo_email']),
+                'email' => trim($alunoData['novo_email']),
                 'password' => Hash::make('123'),
                 'cpf' => $alunoData['novo_cpf'],
                 'dt_nascimento' => $alunoData['novo_dt_nascimento'],

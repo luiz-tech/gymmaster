@@ -12,14 +12,14 @@ class SystemController extends Controller
 {
     public function load_data_chart()
     {
-       $alunos_a_dia = DB::table('pessoas')
+        $alunos_por_dia = DB::table('pessoas')
         ->join('alunos', 'pessoas.id', '=', 'alunos.id_pessoa')
-        ->select(DB::raw('DAYOFWEEK(pessoas.created_at) as day'), DB::raw('COUNT(*) as student_count'))
-        ->groupBy('day')
-        ->orderBy('day')
+        ->select(DB::raw('DATE_FORMAT(pessoas.created_at, "%d/%m") as day_month'), DB::raw('COUNT(*) as student_count'))
+        ->groupBy('day_month')
+        ->orderBy('pessoas.created_at')
         ->get();
 
-        return response()->json($alunos_a_dia);
+        return response()->json($alunos_por_dia);
     }
 
     public function load_planos()

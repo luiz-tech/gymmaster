@@ -33,6 +33,8 @@
   <link rel="stylesheet" href="adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
+  <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
 <div class="wrapper">
@@ -78,10 +80,12 @@
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
-        <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+        <img src="adminlte/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="#" class="d-block"><?php session_start(); print_r($_SESSION); ?></a>
+        <?php $nomeCompleto = Auth::user()->nome; ?>
+        <?php list($primeiroNome, $segundoNome) = explode(' ', $nomeCompleto); ?>
+        <a href="#" class="d-block">{{ $primeiroNome }} {{ $segundoNome }}</a>
       </div>
     </div>
 

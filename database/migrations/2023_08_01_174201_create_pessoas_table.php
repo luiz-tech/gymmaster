@@ -21,7 +21,7 @@ class CreatePessoasTable extends Migration
             $table->string('cpf',30);
             $table->date('dt_nascimento');
             $table->enum('sexo',['M','F','O']);
-            $table->char('status',1);
+            $table->char('status',2);
 
             $table->timestamps();
         });
