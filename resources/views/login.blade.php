@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>@if(Route::getCurrentRoute()) {{ Route::getCurrentRoute()->getName() }} @else {{ env('APP_NAME') }} @endif</title>
+  <title>{{ Route::getCurrentRoute()->getName() }} | {{ env('APP_NAME') }}</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -18,10 +18,8 @@
 <div class="login-box text-center">
   <!-- /.login-logo -->
 
-  
-
   <img class="img-circle mb-3" width=100 src="resources/images/logo-dark.png"/>
-  <div class="card card-outline card-primary">
+  <div class="card card-outline card-orange">
     
     <div class="card-header text-center">
       <p class="h1"><b>Gym</b>Master</p>

@@ -57,7 +57,7 @@
       <a href="{{ route('Painel') }}" class="nav-link">Painel</a>
     </li>
     <li class="nav-item">
-      <a href="#" class="nav-link">Sobre Nós</a>
+      <a href="https://www.instagram.com/luiz_websolucoes/" target="_blank" class="nav-link">Sobre Nós</a>
     </li>
     <!-- Add more menu items as needed -->
   </ul>

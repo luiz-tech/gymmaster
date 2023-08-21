@@ -42,7 +42,7 @@
             <div class="small-box bg-success">
               <div class="inner">
                 <h3 id="alunos_ativos">{{ App\Models\Pessoas::join('alunos', 'pessoas.id', '=', 'alunos.id_pessoa')
-                ->where('pessoas.status', 'A')
+                ->where('pessoas.status', 'AA')
                 ->count();}}</h3>
 
                 <p>Alunos Ativos</p>
@@ -59,7 +59,7 @@
             <div class="small-box badge-danger">
               <div class="inner">
                 <h3 id="alunos_inativos">{{ App\Models\Pessoas::join('alunos', 'pessoas.id', '=', 'alunos.id_pessoa')
-                ->where('pessoas.status', 'I')
+                ->where('pessoas.status', 'AI')
                 ->count();}}</h3>
 
                 <p>Alunos Inativos</p>
